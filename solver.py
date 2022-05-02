@@ -75,17 +75,17 @@ def generate_partitions(l: int, l1: int, l2: int, l3: int):
 
 
 def cplex_solver(
-    base_matrix: t.List[t.List[int]], c_vector: t.List[int], n_bound: int
+    base_matrix: t.List[t.List[int]], c_vector: t.List[int], m1: int, m2: int, m3: int, n_bound: int
 ) -> t.Union[SolverSuccess, SolverError]:
     problem = cplex.Cplex()
     problem.objective.set_sense(problem.objective.sense.minimize)
 
     # the matrix input to the IP solver:
     a_matrix = [
-        [base_matrix[0][j] - base_matrix[1][j] for j in range(len(c_vector))],
-        [base_matrix[1][j] - base_matrix[0][j] for j in range(len(c_vector))],
-        [base_matrix[1][j] - base_matrix[2][j] for j in range(len(c_vector))],
-        [base_matrix[2][j] - base_matrix[1][j] for j in range(len(c_vector))],
+        [m2*base_matrix[0][j] - m1*base_matrix[1][j] for j in range(len(c_vector))],
+        [m1*base_matrix[1][j] - m2*base_matrix[0][j] for j in range(len(c_vector))],
+        [m3*base_matrix[1][j] - m2*base_matrix[2][j] for j in range(len(c_vector))],
+        [m2*base_matrix[2][j] - m3*base_matrix[1][j] for j in range(len(c_vector))],
         [1 for _ in range(len(c_vector))],
         [1 for _ in range(len(c_vector))]
     ]
@@ -121,7 +121,9 @@ def cplex_solver(
     )
 
 
-def solver(l: int, l1: int, l2: int, l3: int, n_bound: int):
+def solver(
+    l: int, l1: int, l2: int, l3: int, m1: int, m2: int, m3: int, n_bound: int
+):
     # we first generate the list of all optimal partitions [p_1, ..., p_k]
     # from lengths l1 > l2 > l3 and total length l
     partitions = generate_partitions(l, l1, l2, l3)
@@ -139,7 +141,7 @@ def solver(l: int, l1: int, l2: int, l3: int, n_bound: int):
     print("----------------------------------------------------------------------")
     old_stdout = sys.stdout
     sys.stdout = open(os.devnull, "w")
-    result = cplex_solver(base_matrix, c_vector, n_bound)
+    result = cplex_solver(base_matrix, c_vector, m1, m2, m3, n_bound)
     sys.stdout = old_stdout
 
     if isinstance(result, SolverError):
@@ -161,39 +163,40 @@ def solver(l: int, l1: int, l2: int, l3: int, n_bound: int):
             f", {str(l3)}: {str(base_matrix[2][result_rows[i]])}"
         )
         check[0] += result_multiplicities[i]*c_vector[result_rows[i]]
-        check[35] += result_multiplicities[i]*base_matrix[0][result_rows[i]]
-        check[30] += result_multiplicities[i] * base_matrix[1][result_rows[i]]
-        check[20] += result_multiplicities[i] * base_matrix[2][result_rows[i]]
+        check[l1] += result_multiplicities[i]*base_matrix[0][result_rows[i]]
+        check[l2] += result_multiplicities[i]*base_matrix[1][result_rows[i]]
+        check[l3] += result_multiplicities[i]*base_matrix[2][result_rows[i]]
     print()
     print()
     print("Check solution adequacy:")
     print(
-        f"Length 35 total quantity: {str(check[35])}\n"
-        f"Length 30 total quantity: {str(check[30])}\n"
-        f"Length 20 total quantity: {str(check[20])}\n"
+        f"Length {l1} total quantity: {str(check[l1])}\n"
+        f"Length {l2} total quantity: {str(check[l2])}\n"
+        f"Length {l3} total quantity: {str(check[l3])}\n"
     )
-    assert check[35] == check[30] == check[20]
+    assert check[l1]*m2*m3 == check[l2]*m1*m3 == check[l3]*m1*m2
 
     print()
-    print(f"Total items of length l: {sum(result_multiplicities)}")
+    print(f"Total items of length l needed : {sum(result_multiplicities)}")
     print(f"Total cost: {str(check[0])}")
     print("----------------------------------------------------------------------")
 
 
 if __name__ == '__main__':
     try:
-        l, l1, l2, l3, n_bound = [int(val) for val in sys.argv[1:]]
-
-        if (total := l1 + l2 + l3) > l:
-            raise ValueError(f"Sum of lengths for pieces ({total}) is greater than l ({l})")
-
+        l, l1, l2, l3, m1, m2, m3, n_bound = [int(val) for val in sys.argv[1:]]
+        
         if not ((l > l1) and (l1 > l2) and (l2 > l3) and l3 > 0):
+            raise ValueError("Basic order and positivity conditions are not satisfied")
+        if not (m1 > 0 and m2 > 0 and m3 > 0):
             raise ValueError("Basic order and positivity conditions are not satisfied")
 
     except Exception as _e:
         print(
-            "Usage: python3 solver.py l l1 l2 l3 n_bound\n"
-            "where l is the total length and l1 > l2 > l3 are the partition lengths"
+            "Usage: python3 solver.py l l1 l2 l3 m1 m2 m3 n_bound"
+            "where l is the total length, l1 > l2 > l3 are the partition length,\n"
+            "m1, m2 and m3 are the respective manufacturing multiplicities\n"
+            "and n_bound is the greatest value admitted for the batch size\n"
         )
     else:
-        solver(l, l1, l2, l3, n_bound)
+        solver(l, l1, l2, l3, m1, m2, m3, n_bound)
