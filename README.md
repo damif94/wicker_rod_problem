@@ -25,5 +25,5 @@ Then you can run the solver with the desired parameters
 ```python 
 python3 solver.py l l1 l2 l3 m1 m2 m3 n_bound
 ```
-where `l` is the rod length, `l1 > l2 > l3` are the manufacturing lengths and the best solution found 
-using a batch size of at most `n_bound` will be printed into STDOUT.
+where `l` is the rod length, `l1 > l2 > l3` are the manufacturing lengths, `m1, m2, m3` are the manufacturing multiplicities 
+and the best solution found using a batch size of at most `n_bound` will be printed into STDOUT.
