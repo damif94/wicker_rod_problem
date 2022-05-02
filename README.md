@@ -12,7 +12,7 @@ It's divided in the following sections:
 3. Formulations as an IP problem: An Integer Programming equivalent version of the problem in section 2 is formulated.
 
 # Implementation
-The whole implementation can be found under `solver.py`. This solver is basically an addapter script on top of the python port for the [IBM CPLEX](https://www.ibm.com/analytics/cplex-optimizer) solver for Integer Programming problems.
+The whole implementation can be found under `solver.py`. This solver is basically an adapter script on top of the python port for the [IBM CPLEX](https://www.ibm.com/analytics/cplex-optimizer) solver for Integer Programming problems.
 
 # Instructions to run
 Assuming that you have python3 and pip3 installed in your system, running the solver is pretty simple:
