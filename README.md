@@ -1,2 +1,2 @@
-# wicker_stick_problem
+# Wicker Stick Problem
 An Integer Programming Solver for The Wicker Rod Optimization Problem
