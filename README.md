@@ -1,4 +1,4 @@
-# Wicker Stick Problem
+# Wicker Rod Problem
 An Integer Programming Solver for The Wicker Rod Optimization Problem
 
 To manufacture a rattan box, m1 pieces of length l1, m2 pieces of length l2 and m3 pieces of length l3 are needed. 
