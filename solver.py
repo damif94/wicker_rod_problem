@@ -192,8 +192,8 @@ if __name__ == '__main__':
 
     except Exception as _e:
         print(
-            "Usage: python3 solver.py l l1 l2 l3 n_bound"
-            "\n where l is the total length and l1 > l2 > l3 are the partition lengths"
+            "Usage: python3 solver.py l l1 l2 l3 n_bound\n"
+            "where l is the total length and l1 > l2 > l3 are the partition lengths"
         )
     else:
         solver(l, l1, l2, l3, n_bound)
