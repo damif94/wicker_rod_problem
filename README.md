@@ -1,8 +1,8 @@
 # Wicker Rod Problem
 An Integer Programming Solver for The Wicker Rod Optimization Problem
 
-To manufacture a rattan box, m1 pieces of length l1, m2 pieces of length l2 and m3 pieces of length l3 are needed. 
-For that, pieces of length l are provided. The goal of the producer is to find a batch size and the "recipe" that will allow the production of that batch while minimizing the absolute wicker waste.
+To manufacture a wicker rattan box, m1 pieces of length l1, m2 pieces of length l2 and m3 pieces of length l3 are needed. 
+For that, rods of length l are provided. The goal of the producer is to find a batch size and the "recipe" that will allow the production of that batch while minimizing the absolute wicker waste.
 
 # Theretical development
 Can be found on `theory.pdf`.
