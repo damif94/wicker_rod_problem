@@ -27,3 +27,7 @@ python3 solver.py l l1 l2 l3 m1 m2 m3 n_bound
 ```
 where `l` is the rod length, `l1 > l2 > l3` are the manufacturing lengths, `m1, m2, m3` are the manufacturing multiplicities 
 and the best solution found using a batch size of at most `n_bound` will be printed into STDOUT.
+
+# Running example
+The following screenshot shows the output for the original problem's parameters.
+<img width="663" alt="Screen Shot 2022-05-03 at 21 43 52" src="https://user-images.githubusercontent.com/29461526/166554149-39c4699d-21a6-4129-8fa5-21eacc9ad442.png">
