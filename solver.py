@@ -92,7 +92,6 @@ def cplex_solver(
 
     try:
         column_names = ["n" + str(i) for i in range(len(c_vector))]
-        print(len(c_vector))
         problem.variables.add(
             obj=c_vector,
             lb=[0.0 for _ in range(len(c_vector))],
@@ -175,9 +174,11 @@ def solver(
         f"Length {l3} total quantity: {str(check[l3])}\n"
     )
     assert check[l1]*m2*m3 == check[l2]*m1*m3 == check[l3]*m1*m2
+    total_rods = sum(result_multiplicities)
 
     print()
-    print(f"Total items of length l needed : {sum(result_multiplicities)}")
+    print(f"Total rods of length l needed : {total_rods*sum([m1, m2, m3])}")
+    print(f"Batch size : {total_rods}")
     print(f"Total cost: {str(check[0])}")
     print("----------------------------------------------------------------------")
 
@@ -193,7 +194,7 @@ if __name__ == '__main__':
 
     except Exception as _e:
         print(
-            "Usage: python3 solver.py l l1 l2 l3 m1 m2 m3 n_bound"
+            "Usage: python3 solver.py l l1 l2 l3 m1 m2 m3 n_bound,\n"
             "where l is the total length, l1 > l2 > l3 are the partition length,\n"
             "m1, m2 and m3 are the respective manufacturing multiplicities\n"
             "and n_bound is the greatest value admitted for the batch size\n"
