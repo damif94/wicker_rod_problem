@@ -31,5 +31,6 @@ and the best solution found using a batch size of at most `n_bound` will be prin
 
 # Running example
 The following screenshot shows the output for the original problem's parameters, that motivated this development.
+
 <img width="528" alt="Screen Shot 2022-05-04 at 19 36 51" src="https://user-images.githubusercontent.com/29461526/166746623-7574eabf-c1c8-430e-91c9-5de2a5754b90.png">
 
