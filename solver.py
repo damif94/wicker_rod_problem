@@ -1,4 +1,5 @@
 import dataclasses
+import math
 import os
 import sys
 
@@ -152,34 +153,50 @@ def solver(
     indexed_result_multiplicities = list(zip(range(0, len(partitions)), result.n_vector))
     result_multiplicities = [n for n in result.n_vector if n != 0]
     result_rows = [i for (i, n) in indexed_result_multiplicities if n != 0]
-    check = {l1: 0, l2: 0, l3: 0, 0: 0}
+    quantities_returned = {l1: 0, l2: 0, l3: 0}
+    total_cost_returned = 0
     for i in range(len(result_rows)):
-        print("Partition " + str(partitions[result_rows[i]]) + " x " + str(int(result_multiplicities[i])))
+        total_cost_returned += int(result_multiplicities[i]*c_vector[result_rows[i]])
+        quantities_returned[l1] += int(result_multiplicities[i]*base_matrix[0][result_rows[i]])
+        quantities_returned[l2] += int(result_multiplicities[i]*base_matrix[1][result_rows[i]])
+        quantities_returned[l3] += int(result_multiplicities[i]*base_matrix[2][result_rows[i]])
+    print()
+
+    repeating_factor = m1 / math.gcd(m1, quantities_returned[l1])
+    quantities = {
+        k: quantities_returned[k]*repeating_factor for k in quantities_returned.keys()
+    }
+
+    for i in range(len(result_rows)):
+        print("Partition " + str(partitions[result_rows[i]]) + " x " + str(int(result_multiplicities[i]*repeating_factor)))
         print(
             "Quantities for length:  " +
-            f"{str(l1)}: {str(base_matrix[0][result_rows[i]])}"
-            f", {str(l2)}: {str(base_matrix[1][result_rows[i]])}"
-            f", {str(l3)}: {str(base_matrix[2][result_rows[i]])}"
+            f"{str(l1)}: {str(base_matrix[0][result_rows[i]]*int(result_multiplicities[i]*repeating_factor))}"
+            f", {str(l2)}: {str(base_matrix[1][result_rows[i]]*int(result_multiplicities[i]*repeating_factor))}"
+            f", {str(l3)}: {str(base_matrix[2][result_rows[i]]*int(result_multiplicities[i]*repeating_factor))}"
         )
-        check[0] += result_multiplicities[i]*c_vector[result_rows[i]]
-        check[l1] += result_multiplicities[i]*base_matrix[0][result_rows[i]]
-        check[l2] += result_multiplicities[i]*base_matrix[1][result_rows[i]]
-        check[l3] += result_multiplicities[i]*base_matrix[2][result_rows[i]]
+
+    batch_size = int(quantities[l1]/m1)
+
     print()
     print()
     print("Check solution adequacy:")
     print(
-        f"Length {l1} total quantity: {str(check[l1])}\n"
-        f"Length {l2} total quantity: {str(check[l2])}\n"
-        f"Length {l3} total quantity: {str(check[l3])}\n"
+        f"Length {l1} total quantity: {str(quantities[l1])}\n"
+        f"Length {l2} total quantity: {str(quantities[l2])}\n"
+        f"Length {l3} total quantity: {str(quantities[l3])}\n"
     )
-    assert check[l1]*m2*m3 == check[l2]*m1*m3 == check[l3]*m1*m2
-    total_rods = sum(result_multiplicities)
+    assert batch_size*m1 == quantities[l1]
+    assert batch_size*m2 == quantities[l2]
+    assert batch_size*m3 == quantities[l3]
+
+    total_rods = sum(result_multiplicities)*repeating_factor
+    total_cost = total_cost_returned*repeating_factor
 
     print()
-    print(f"Total rods of length l needed : {total_rods*sum([m1, m2, m3])}")
-    print(f"Batch size : {total_rods}")
-    print(f"Total cost: {str(check[0])}")
+    print(f"Total rods of length l needed : {total_rods}")
+    print(f"Batch size : {batch_size}")
+    print(f"Total cost: {total_cost}")
     print("----------------------------------------------------------------------")
 
 
