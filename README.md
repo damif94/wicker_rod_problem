@@ -10,6 +10,7 @@ It's divided in the following sections:
 1. Introduction: A basic, non technical introduction to the problem
 2. Formalization and formulation: The necessary notions are formalized and the problem is formulated mathematically using this notions
 3. Formulations as an IP problem: An Integer Programming equivalent version of the problem in section 2 is formulated.
+4. Implementation details: Where some implementation caveats are explained
 
 # Implementation
 The whole implementation can be found under `solver.py`. This solver is basically an adapter script on top of the python port for the [IBM CPLEX](https://www.ibm.com/analytics/cplex-optimizer) solver for Integer Programming problems.
@@ -30,5 +31,5 @@ and the best solution found using a batch size of at most `n_bound` will be prin
 
 # Running example
 The following screenshot shows the output for the original problem's parameters, that motivated this development.
+<img width="528" alt="Screen Shot 2022-05-04 at 19 36 51" src="https://user-images.githubusercontent.com/29461526/166746623-7574eabf-c1c8-430e-91c9-5de2a5754b90.png">
 
-<img width="663" alt="Screen Shot 2022-05-03 at 21 43 52" src="https://user-images.githubusercontent.com/29461526/166554149-39c4699d-21a6-4129-8fa5-21eacc9ad442.png">
