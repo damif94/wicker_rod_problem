@@ -33,7 +33,7 @@ def generate_partition_with_lengths(l: int, lengths: t.List[int]) -> t.List[int]
     return res
 
 
-def generate_partitions(l: int, l1: int, l2: int, l3: int) -> t.List[int]:
+def generate_partitions(l: int, l1: int, l2: int, l3: int) -> t.List[t.List[int]]:
     first_optimal_partition = generate_partition_with_lengths(l, [l1, l2, l3])
     optimal_partitions = [first_optimal_partition]
 
